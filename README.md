@@ -7,42 +7,74 @@
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 </p>
 
-## 🖥️ Página inicial
+## 🏷️ Sistema de Categorias e Tags
 
-## 🏷️ Sistema de Categorias
-
-Esta funcionalidade adiciona um sistema completo de **categorização de mensagens**, permitindo organizar, filtrar e identificar visualmente o tipo de cada mensagem.
+Esta funcionalidade expande o sistema de categorização de mensagens, adicionando um gerenciamento completo de **tags**, permitindo organizar, filtrar e identificar visualmente cada mensagem de forma ainda mais flexível.
 
 <div align="center">
 
-https://github.com/user-attachments/assets/0efbaeaa-e658-4e33-aae9-2c5f30eba948
+https://github.com/user-attachments/assets/502d00e4-905e-4236-9239-394ab7313d71
 
 </div>
 
 ### 📋 O que foi implementado
 
-#### 1. Admin — Listagem de mensagens com coluna Categoria e filtro lateral
-Após a `migration`, o painel administrativo passou a exibir:
-- Uma nova coluna **Categoria** na listagem de mensagens;
-- Um **filtro lateral** que permite filtrar as mensagens por categoria diretamente no admin.
+#### 1. Admin — Seleção de tags com `filter_horizontal`
+O painel administrativo agora utiliza o widget **`filter_horizontal`** para o campo de tags.
 
-#### 2. Admin — Cadastro de Categorias
-Foi criada uma nova seção no painel admin para **criar e gerenciar categorias**, por exemplo:
-- Aviso
-- Dúvida
-- Sugestão
+Em vez do `<select multiple>` padrão, o Django exibe dois painéis lado a lado:
 
-#### 3. Página principal — Selos de categoria
-Na página principal, cada mensagem agora exibe um **selo (badge) colorido** com o nome da sua categoria.
+- **Disponíveis**
+- **Escolhidas**
 
-Mensagens sem categoria **não exibem o selo**, graças à proteção implementada no template:
+Esse componente facilita a seleção de múltiplas tags, tornando o cadastro das mensagens muito mais intuitivo.
+
+---
+
+#### 2. Admin — Listagem de mensagens com filtro por tags
+A listagem de mensagens no painel administrativo foi ampliada e agora permite filtrar registros por:
+
+- **Categoria**
+- **Tags**
+
+O filtro lateral exibe todas as tags cadastradas, permitindo localizar rapidamente mensagens relacionadas a um determinado assunto.
+
+---
+
+#### 3. Página principal — Hashtags
+Cada mensagem agora exibe suas tags em formato de **hashtags**, por exemplo:
+
+`#aviso` `#específico` `#geral`
+
+Caso a mensagem não possua nenhuma tag, o bloco não é renderizado graças à proteção implementada no template:
 
 ```django
-{% if m.categoria %}
-  <span class="badge">{{ m.categoria }}</span>
+{% if m.tags.all %}
+    {% for tag in m.tags.all %}
+        #{{ tag.slug }}
+    {% endfor %}
 {% endif %}
 ```
 
+---
+
+### 📚 Conceitos abordados neste roteiro
+
+- Diferença entre **ForeignKey (1:N)** e **ManyToManyField (N:N)**;
+- Utilização de **SlugField** como identificador textual amigável;
+- Criação automática da tabela de junção pelo **Django ORM**;
+- Uso de `blank=True` em `ManyToManyField` (e por que não utilizar `null=True`);
+- Configuração do widget `filter_horizontal` no Django Admin;
+- Iteração sobre relacionamentos N:N utilizando:
+
+```django
+{% for tag in m.tags.all %}
+```
+
+- Inserção idempotente de dados utilizando `get_or_create`;
+- Navegação da relação em ambos os sentidos com `related_name`;
+- Inspeção da estrutura do banco utilizando `dbshell` e comandos SQLite.
+
 </br>
 
-> 🎥 O vídeo acima demonstra o fluxo completo: cadastro de categoria no admin → associação com uma mensagem → exibição do selo colorido na página principal.
+> 🎥 O vídeo acima demonstra todo o fluxo: cadastro de tags → seleção com `filter_horizontal` → associação às mensagens → filtros no painel administrativo → exibição das hashtags na página principal.

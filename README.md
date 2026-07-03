@@ -7,23 +7,42 @@
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 </p>
 
+## 🖥️ Página inicial
 
-## 🖥️ Site em execução
+## 🏷️ Sistema de Categorias
 
-<p align="center">
-  <img src="ejecucion.png" alt="Site em execução" width="700">
-</p>
+Esta funcionalidade adiciona um sistema completo de **categorização de mensagens**, permitindo organizar, filtrar e identificar visualmente o tipo de cada mensagem.
 
-<p align="center">
-  <em>Página inicial do projeto rodando localmente em <code>http://localhost:8000</code></em>
-</p>
+<div align="center">
 
-## ▶️ Como executar o projeto
+https://github.com/user-attachments/assets/0efbaeaa-e658-4e33-aae9-2c5f30eba948
 
-```bash
-git clone 
-cd demo-django
-docker compose up --build
+</div>
+
+### 📋 O que foi implementado
+
+#### 1. Admin — Listagem de mensagens com coluna Categoria e filtro lateral
+Após a `migration`, o painel administrativo passou a exibir:
+- Uma nova coluna **Categoria** na listagem de mensagens;
+- Um **filtro lateral** que permite filtrar as mensagens por categoria diretamente no admin.
+
+#### 2. Admin — Cadastro de Categorias
+Foi criada uma nova seção no painel admin para **criar e gerenciar categorias**, por exemplo:
+- Aviso
+- Dúvida
+- Sugestão
+
+#### 3. Página principal — Selos de categoria
+Na página principal, cada mensagem agora exibe um **selo (badge) colorido** com o nome da sua categoria.
+
+Mensagens sem categoria **não exibem o selo**, graças à proteção implementada no template:
+
+```django
+{% if m.categoria %}
+  <span class="badge">{{ m.categoria }}</span>
+{% endif %}
 ```
 
-Acesse **http://localhost:8000** no navegador.
+</br>
+
+> 🎥 O vídeo acima demonstra o fluxo completo: cadastro de categoria no admin → associação com uma mensagem → exibição do selo colorido na página principal.

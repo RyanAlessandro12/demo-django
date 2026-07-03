@@ -7,55 +7,42 @@
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 </p>
 
-
 ## 🖥️ Página inicial
 
-<p align="center">
-  <img src="imagen principal.png" alt="Página inicial" width="700">
-</p>
+## 🏷️ Sistema de Categorias
 
-<p align="center">
-  <em>Página inicial do projeto com o tema visual modificado (gradiente em tons de esmeralda/teal).</em>
-</p>
+Esta funcionalidade adiciona um sistema completo de **categorização de mensagens**, permitindo organizar, filtrar e identificar visualmente o tipo de cada mensagem.
 
-## 📝 Cadastro de mensagem no admin
+<div align="center">
 
-<p align="center">
-  <img src="prueba de mensaje.png" alt="Cadastro de mensagem" width="700">
-</p>
+https://github.com/user-attachments/assets/0efbaeaa-e658-4e33-aae9-2c5f30eba948
 
-<p align="center">
-  <em>Formulário de cadastro de mensagem no painel administrativo, com o campo <code>autor</code> adicionado.</em>
-</p>
+</div>
 
-## ℹ️ Página Sobre
+### 📋 O que foi implementado
 
-<p align="center">
-  <img src="sobre.png" alt="Página Sobre" width="700">
-</p>
+#### 1. Admin — Listagem de mensagens com coluna Categoria e filtro lateral
+Após a `migration`, o painel administrativo passou a exibir:
+- Uma nova coluna **Categoria** na listagem de mensagens;
+- Um **filtro lateral** que permite filtrar as mensagens por categoria diretamente no admin.
 
-<p align="center">
-  <em>Nova página <code>/sobre/</code> criada com informações sobre o projeto.</em>
-</p>
+#### 2. Admin — Cadastro de Categorias
+Foi criada uma nova seção no painel admin para **criar e gerenciar categorias**, por exemplo:
+- Aviso
+- Dúvida
+- Sugestão
 
-## ▶️ Como executar o projeto
+#### 3. Página principal — Selos de categoria
+Na página principal, cada mensagem agora exibe um **selo (badge) colorido** com o nome da sua categoria.
 
-```bash
-git clone 
-cd demo-django
-docker compose up --build
+Mensagens sem categoria **não exibem o selo**, graças à proteção implementada no template:
+
+```django
+{% if m.categoria %}
+  <span class="badge">{{ m.categoria }}</span>
+{% endif %}
 ```
 
-Acesse **http://localhost:8000** no navegador.
+</br>
 
-## 🔑 Acesso ao admin
-
-Após criar o superusuário, acesse **http://localhost:8000/admin/** para gerenciar as mensagens.
-
-## 📋 Funcionalidades implementadas
-
-- **Página inicial** com listagem de mensagens do banco de dados SQLite
-- **Tema visual** modificado com gradiente em tons de esmeralda/teal
-- **Campo `autor`** adicionado ao modelo `Mensagem`
-- **Página `/sobre/`** com informações estáticas sobre o projeto
-- **Painel administrativo** do Django para gerenciar o conteúdo
+> 🎥 O vídeo acima demonstra o fluxo completo: cadastro de categoria no admin → associação com uma mensagem → exibição do selo colorido na página principal.

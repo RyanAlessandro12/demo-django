@@ -7,55 +7,74 @@
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 </p>
 
+## 🏷️ Sistema de Categorias e Tags
 
-## 🖥️ Página inicial
+Esta funcionalidade expande o sistema de categorização de mensagens, adicionando um gerenciamento completo de **tags**, permitindo organizar, filtrar e identificar visualmente cada mensagem de forma ainda mais flexível.
 
-<p align="center">
-  <img src="imagen principal.png" alt="Página inicial" width="700">
-</p>
+<div align="center">
 
-<p align="center">
-  <em>Página inicial do projeto com o tema visual modificado (gradiente em tons de esmeralda/teal).</em>
-</p>
+https://github.com/user-attachments/assets/502d00e4-905e-4236-9239-394ab7313d71
 
-## 📝 Cadastro de mensagem no admin
+</div>
 
-<p align="center">
-  <img src="prueba de mensaje.png" alt="Cadastro de mensagem" width="700">
-</p>
+### 📋 O que foi implementado
 
-<p align="center">
-  <em>Formulário de cadastro de mensagem no painel administrativo, com o campo <code>autor</code> adicionado.</em>
-</p>
+#### 1. Admin — Seleção de tags com `filter_horizontal`
+O painel administrativo agora utiliza o widget **`filter_horizontal`** para o campo de tags.
 
-## ℹ️ Página Sobre
+Em vez do `<select multiple>` padrão, o Django exibe dois painéis lado a lado:
 
-<p align="center">
-  <img src="sobre.png" alt="Página Sobre" width="700">
-</p>
+- **Disponíveis**
+- **Escolhidas**
 
-<p align="center">
-  <em>Nova página <code>/sobre/</code> criada com informações sobre o projeto.</em>
-</p>
+Esse componente facilita a seleção de múltiplas tags, tornando o cadastro das mensagens muito mais intuitivo.
 
-## ▶️ Como executar o projeto
+---
 
-```bash
-git clone 
-cd demo-django
-docker compose up --build
+#### 2. Admin — Listagem de mensagens com filtro por tags
+A listagem de mensagens no painel administrativo foi ampliada e agora permite filtrar registros por:
+
+- **Categoria**
+- **Tags**
+
+O filtro lateral exibe todas as tags cadastradas, permitindo localizar rapidamente mensagens relacionadas a um determinado assunto.
+
+---
+
+#### 3. Página principal — Hashtags
+Cada mensagem agora exibe suas tags em formato de **hashtags**, por exemplo:
+
+`#aviso` `#específico` `#geral`
+
+Caso a mensagem não possua nenhuma tag, o bloco não é renderizado graças à proteção implementada no template:
+
+```django
+{% if m.tags.all %}
+    {% for tag in m.tags.all %}
+        #{{ tag.slug }}
+    {% endfor %}
+{% endif %}
 ```
 
-Acesse **http://localhost:8000** no navegador.
+---
 
-## 🔑 Acesso ao admin
+### 📚 Conceitos abordados neste roteiro
 
-Após criar o superusuário, acesse **http://localhost:8000/admin/** para gerenciar as mensagens.
+- Diferença entre **ForeignKey (1:N)** e **ManyToManyField (N:N)**;
+- Utilização de **SlugField** como identificador textual amigável;
+- Criação automática da tabela de junção pelo **Django ORM**;
+- Uso de `blank=True` em `ManyToManyField` (e por que não utilizar `null=True`);
+- Configuração do widget `filter_horizontal` no Django Admin;
+- Iteração sobre relacionamentos N:N utilizando:
 
-## 📋 Funcionalidades implementadas
+```django
+{% for tag in m.tags.all %}
+```
 
-- **Página inicial** com listagem de mensagens do banco de dados SQLite
-- **Tema visual** modificado com gradiente em tons de esmeralda/teal
-- **Campo `autor`** adicionado ao modelo `Mensagem`
-- **Página `/sobre/`** com informações estáticas sobre o projeto
-- **Painel administrativo** do Django para gerenciar o conteúdo
+- Inserção idempotente de dados utilizando `get_or_create`;
+- Navegação da relação em ambos os sentidos com `related_name`;
+- Inspeção da estrutura do banco utilizando `dbshell` e comandos SQLite.
+
+</br>
+
+> 🎥 O vídeo acima demonstra todo o fluxo: cadastro de tags → seleção com `filter_horizontal` → associação às mensagens → filtros no painel administrativo → exibição das hashtags na página principal.

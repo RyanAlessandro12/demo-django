@@ -156,6 +156,12 @@
                                     {{ m.criada_em|date:"d/m/Y H:i" }}
                                 </span>
                             </div>
+                            <div class="flex gap-3 mt-2">
+                                <a href="{% url 'editar_mensagem' m.id %}"
+                                   class="text-xs text-indigo-500 hover:text-indigo-700 underline">editar</a>
+                                <a href="{% url 'remover_mensagem' m.id %}"
+                                   class="text-xs text-red-500 hover:text-red-700 underline">remover</a>
+                            </div>
                         </div>
                     </div>
                 </article>
